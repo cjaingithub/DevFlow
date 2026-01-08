@@ -1,0 +1,164 @@
+{
+  "title": "Flowchart vers Code",
+  "description": "Importez des organigrammes Lucid XML et générez des patterns de code",
+  
+  "steps": {
+    "upload": {
+      "title": "Télécharger l'organigramme",
+      "description": "Sélectionnez un fichier XML Lucid"
+    },
+    "preview": {
+      "title": "Aperçu et Analyse",
+      "description": "Examinez les exigences et patterns extraits"
+    },
+    "configure": {
+      "title": "Configurer la Génération",
+      "description": "Définir les mappages d'entités et options"
+    },
+    "generate": {
+      "title": "Générer le Code",
+      "description": "Générer le code à partir des patterns"
+    },
+    "result": {
+      "title": "Examiner les Résultats",
+      "description": "Examiner et sauvegarder les fichiers générés"
+    }
+  },
+
+  "upload": {
+    "title": "Importer un Organigramme Lucid",
+    "description": "Téléchargez un export XML Lucidchart pour extraire les exigences et générer du code",
+    "dropHere": "Déposez votre fichier XML ici",
+    "orClick": "ou cliquez pour parcourir",
+    "browseFiles": "Parcourir les Fichiers",
+    "fromProject": "Depuis le Projet",
+    "parsing": "Analyse de l'organigramme...",
+    "parsingDescription": "Extraction des nœuds, connexions et patterns",
+    "fileReady": "Fichier Prêt",
+    "parseError": "Erreur d'Analyse",
+    "tryAnother": "Essayer un Autre Fichier",
+    "supportedFormats": "Formats Supportés",
+    "lucidchartXml": "Lucidchart XML",
+    "lucidchartXmlDescription": "Export natif Lucidchart",
+    "drawioXml": "draw.io / diagrams.net",
+    "drawioXmlDescription": "Format mxGraphModel",
+    "devflowXml": "DevFlow XML",
+    "devflowXmlDescription": "Format personnalisé",
+    "tips": {
+      "title": "Conseils pour de Meilleurs Résultats",
+      "tip1": "Utilisez des étiquettes claires et descriptives pour vos nœuds",
+      "tip2": "Utilisez des formes de base de données (cylindres) pour les opérations de données",
+      "tip3": "Les losanges de décision génèrent une logique conditionnelle",
+      "tip4": "Les sous-processus créent des méthodes de service séparées"
+    }
+  },
+
+  "preview": {
+    "title": "Aperçu de l'Organigramme",
+    "parsedSuccessfully": "Organigramme analysé avec succès",
+    "nodes": "Nœuds",
+    "connections": "Connexions",
+    "patterns": "Patterns",
+    "warnings": "Avertissements",
+    "tabs": {
+      "overview": "Aperçu",
+      "requirements": "Exigences",
+      "processes": "Processus",
+      "patterns": "Patterns"
+    },
+    "nodeTypes": "Types de Nœuds",
+    "dataOperations": "Opérations de Données",
+    "noDataOperations": "Aucune opération de données détectée",
+    "noRequirements": "Aucune exigence extraite de l'organigramme",
+    "noProcesses": "Aucun processus extrait de l'organigramme",
+    "noPatterns": "Aucun pattern généré de l'organigramme",
+    "acceptanceCriteria": "Critères d'Acceptation",
+    "inputs": "Entrées",
+    "outputs": "Sorties",
+    "confidence": "confiance",
+    "continueToConfig": "Continuer vers la Configuration"
+  },
+
+  "config": {
+    "title": "Configurer la Génération",
+    "description": "Configurez les mappages d'entités et options de génération",
+    "entityMappings": {
+      "title": "Mappages d'Entités",
+      "description": "Mappez les entités de l'organigramme vers votre nouvelle implémentation",
+      "autoSuggest": "Auto-Suggérer",
+      "referenceEntity": "Entité de Référence",
+      "newEntityName": "Nouveau Nom d'Entité",
+      "add": "Ajouter",
+      "detectedEntities": "Entités Détectées"
+    },
+    "outputOptions": {
+      "title": "Options de Sortie",
+      "outputDir": "Répertoire de Sortie",
+      "outputDirDescription": "Les fichiers générés seront placés dans ce répertoire relatif à la racine de votre projet",
+      "targetLanguage": "Langage Cible",
+      "includeTests": "Inclure les Tests",
+      "includeTestsDescription": "Générer des modèles de test pour chaque service",
+      "includeDocs": "Inclure la Documentation",
+      "includeDocsDescription": "Générer README et documentation API"
+    },
+    "summary": {
+      "title": "Résumé de la Génération",
+      "patternsWillBeGenerated": "patterns seront générés",
+      "withMappings": "avec mappages d'entités"
+    },
+    "generateCode": "Générer le Code"
+  },
+
+  "generate": {
+    "title": "Génération du Code",
+    "preparing": "Préparation de la génération...",
+    "processing": "Traitement",
+    "analyzing": "Analyse des patterns de l'organigramme...",
+    "generatingServices": "Génération des classes de service...",
+    "generatingRepos": "Génération des patterns de repository...",
+    "generatingTests": "Génération des fichiers de test...",
+    "generatingDocs": "Génération de la documentation...",
+    "complete": "Génération Terminée !",
+    "allFilesGenerated": "Tous les fichiers ont été générés avec succès",
+    "failed": "Échec de la Génération",
+    "generationLog": "Journal de Génération",
+    "filesToGenerate": "Fichiers à Générer",
+    "basedOnPatterns": "Basé sur les patterns",
+    "backToConfig": "Retour à la Configuration"
+  },
+
+  "result": {
+    "title": "Génération Terminée !",
+    "filesGenerated": "fichiers générés avec succès",
+    "tabs": {
+      "files": "Fichiers Générés",
+      "summary": "Résumé"
+    },
+    "generatedFiles": "Fichiers Générés",
+    "selectToPreview": "Sélectionnez un fichier pour prévisualiser",
+    "copyToClipboard": "Copier dans le presse-papiers",
+    "filesByType": "Fichiers par Type",
+    "files": "fichiers",
+    "confidenceOverview": "Aperçu de la Confiance",
+    "highConfidence": "Haute Confiance",
+    "mediumConfidence": "Confiance Moyenne",
+    "lowConfidence": "Basse Confiance",
+    "nextSteps": {
+      "title": "Prochaines Étapes",
+      "step1": "Examinez le code généré et apportez les ajustements nécessaires",
+      "step2": "Copiez les fichiers dans votre projet ou utilisez \"Appliquer au Projet\" pour les sauvegarder",
+      "step3": "Exécutez les tests pour vérifier que le code généré fonctionne correctement",
+      "step4": "Intégrez avec votre base de code existante selon les besoins"
+    },
+    "startOver": "Recommencer",
+    "downloadZip": "Télécharger ZIP",
+    "applyToProject": "Appliquer au Projet"
+  },
+
+  "common": {
+    "back": "Retour",
+    "next": "Suivant",
+    "cancel": "Annuler",
+    "error": "Erreur"
+  }
+}

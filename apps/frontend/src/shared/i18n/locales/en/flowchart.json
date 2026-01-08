@@ -1,0 +1,164 @@
+{
+  "title": "Flowchart to Code",
+  "description": "Import Lucid XML flowcharts and generate code patterns",
+  
+  "steps": {
+    "upload": {
+      "title": "Upload Flowchart",
+      "description": "Select a Lucid XML flowchart file"
+    },
+    "preview": {
+      "title": "Preview & Analyze",
+      "description": "Review extracted requirements and patterns"
+    },
+    "configure": {
+      "title": "Configure Generation",
+      "description": "Set entity mappings and options"
+    },
+    "generate": {
+      "title": "Generate Code",
+      "description": "Generate code from flowchart patterns"
+    },
+    "result": {
+      "title": "Review Results",
+      "description": "Review and save generated files"
+    }
+  },
+
+  "upload": {
+    "title": "Import Lucid Flowchart",
+    "description": "Upload a Lucidchart XML export to extract requirements and generate code",
+    "dropHere": "Drop your XML file here",
+    "orClick": "or click to browse",
+    "browseFiles": "Browse Files",
+    "fromProject": "From Project",
+    "parsing": "Parsing Flowchart...",
+    "parsingDescription": "Extracting nodes, connections, and patterns",
+    "fileReady": "File Ready",
+    "parseError": "Parse Error",
+    "tryAnother": "Try Another File",
+    "supportedFormats": "Supported Formats",
+    "lucidchartXml": "Lucidchart XML",
+    "lucidchartXmlDescription": "Native Lucidchart export",
+    "drawioXml": "draw.io / diagrams.net",
+    "drawioXmlDescription": "mxGraphModel format",
+    "devflowXml": "DevFlow XML",
+    "devflowXmlDescription": "Custom flowchart format",
+    "tips": {
+      "title": "Tips for Best Results",
+      "tip1": "Use clear, descriptive labels for your flowchart nodes",
+      "tip2": "Use database shapes (cylinders) for data operations",
+      "tip3": "Decision diamonds will generate conditional logic",
+      "tip4": "Subprocess shapes create separate service methods"
+    }
+  },
+
+  "preview": {
+    "title": "Flowchart Preview",
+    "parsedSuccessfully": "Flowchart parsed successfully",
+    "nodes": "Nodes",
+    "connections": "Connections",
+    "patterns": "Patterns",
+    "warnings": "Warnings",
+    "tabs": {
+      "overview": "Overview",
+      "requirements": "Requirements",
+      "processes": "Processes",
+      "patterns": "Patterns"
+    },
+    "nodeTypes": "Node Types",
+    "dataOperations": "Data Operations",
+    "noDataOperations": "No data operations detected",
+    "noRequirements": "No requirements extracted from flowchart",
+    "noProcesses": "No processes extracted from flowchart",
+    "noPatterns": "No patterns generated from flowchart",
+    "acceptanceCriteria": "Acceptance Criteria",
+    "inputs": "Inputs",
+    "outputs": "Outputs",
+    "confidence": "confidence",
+    "continueToConfig": "Continue to Configuration"
+  },
+
+  "config": {
+    "title": "Configure Generation",
+    "description": "Set up entity mappings and generation options",
+    "entityMappings": {
+      "title": "Entity Mappings",
+      "description": "Map entities from the flowchart to your new implementation",
+      "autoSuggest": "Auto-Suggest",
+      "referenceEntity": "Reference Entity",
+      "newEntityName": "New Entity Name",
+      "add": "Add",
+      "detectedEntities": "Detected Entities"
+    },
+    "outputOptions": {
+      "title": "Output Options",
+      "outputDir": "Output Directory",
+      "outputDirDescription": "Generated files will be placed in this directory relative to your project root",
+      "targetLanguage": "Target Language",
+      "includeTests": "Include Tests",
+      "includeTestsDescription": "Generate test templates for each service",
+      "includeDocs": "Include Documentation",
+      "includeDocsDescription": "Generate README and API documentation"
+    },
+    "summary": {
+      "title": "Generation Summary",
+      "patternsWillBeGenerated": "patterns will be generated",
+      "withMappings": "with entity mappings"
+    },
+    "generateCode": "Generate Code"
+  },
+
+  "generate": {
+    "title": "Generating Code",
+    "preparing": "Preparing generation...",
+    "processing": "Processing",
+    "analyzing": "Analyzing flowchart patterns...",
+    "generatingServices": "Generating service classes...",
+    "generatingRepos": "Generating repository patterns...",
+    "generatingTests": "Generating test files...",
+    "generatingDocs": "Generating documentation...",
+    "complete": "Generation Complete!",
+    "allFilesGenerated": "All files have been generated successfully",
+    "failed": "Generation Failed",
+    "generationLog": "Generation Log",
+    "filesToGenerate": "Files to Generate",
+    "basedOnPatterns": "Based on patterns",
+    "backToConfig": "Back to Configuration"
+  },
+
+  "result": {
+    "title": "Generation Complete!",
+    "filesGenerated": "files generated successfully",
+    "tabs": {
+      "files": "Generated Files",
+      "summary": "Summary"
+    },
+    "generatedFiles": "Generated Files",
+    "selectToPreview": "Select a file to preview",
+    "copyToClipboard": "Copy to clipboard",
+    "filesByType": "Files by Type",
+    "files": "files",
+    "confidenceOverview": "Confidence Overview",
+    "highConfidence": "High Confidence",
+    "mediumConfidence": "Medium Confidence",
+    "lowConfidence": "Low Confidence",
+    "nextSteps": {
+      "title": "Next Steps",
+      "step1": "Review the generated code and make any necessary adjustments",
+      "step2": "Copy files to your project or use \"Apply to Project\" to save them",
+      "step3": "Run tests to verify the generated code works correctly",
+      "step4": "Integrate with your existing codebase as needed"
+    },
+    "startOver": "Start Over",
+    "downloadZip": "Download ZIP",
+    "applyToProject": "Apply to Project"
+  },
+
+  "common": {
+    "back": "Back",
+    "next": "Next",
+    "cancel": "Cancel",
+    "error": "Error"
+  }
+}
