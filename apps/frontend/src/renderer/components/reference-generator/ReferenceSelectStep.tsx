@@ -93,77 +93,114 @@ export function ReferenceSelectStep({
   const [newRefPath, setNewRefPath] = useState('');
   const [isAdding, setIsAdding] = useState(false);
   const [selectedId, setSelectedId] = useState<string | null>(selectedReference?.id || null);
+  
+  // Load references on mount
+  useEffect(() => {
+    const loadReferences = async () => {
+      try {
+        const refs = await window.electronAPI.referenceGenerator.listReferences(projectId);
+        if (refs && refs.length > 0) {
+          setReferences(refs);
+        }
+      } catch (error) {
+        console.error('Failed to load references:', error);
+        // Keep mock references as fallback
+      }
+    };
+    
+    loadReferences();
+  }, [projectId]);
 
   const handleRefresh = useCallback(async () => {
     setIsRefreshing(true);
-    // TODO: Replace with actual API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      const refs = await window.electronAPI.referenceGenerator.listReferences(projectId);
+      setReferences(refs);
+    } catch (error) {
+      console.error('Failed to refresh references:', error);
+    }
     setIsRefreshing(false);
-  }, []);
+  }, [projectId]);
 
   const handleSelectDirectory = useCallback(async () => {
     try {
-      const selectedPath = await window.electronAPI.selectDirectory();
+      const result = await window.electronAPI.referenceGenerator.selectDirectory(projectId);
       
-      if (selectedPath) {
-        setNewRefPath(selectedPath);
+      if (result.path && !result.canceled) {
+        setNewRefPath(result.path);
       }
     } catch (error) {
       console.error('Failed to select directory:', error);
     }
-  }, []);
+  }, [projectId]);
 
   const handleAddReference = useCallback(async () => {
     if (!newRefName.trim() || !newRefPath.trim()) return;
     
     setIsAdding(true);
-    // TODO: Replace with actual API call
-    await new Promise(resolve => setTimeout(resolve, 1500));
-    
-    const newRef: ReferenceProjectSummary = {
-      id: `ref-${Date.now()}`,
-      name: newRefName,
-      description: newRefDescription,
-      patternCount: 0,
-      tableCount: 0,
-      techStack: {
-        languages: [],
-        frameworks: [],
-        databases: [],
-        infrastructure: []
-      },
-      status: 'indexing',
-      usageCount: 0
-    };
-    
-    setReferences(prev => [newRef, ...prev]);
-    setShowAddDialog(false);
-    setNewRefName('');
-    setNewRefDescription('');
-    setNewRefPath('');
+    try {
+      const result = await window.electronAPI.referenceGenerator.loadReference(
+        projectId,
+        newRefPath,
+        newRefName,
+        newRefDescription
+      );
+      
+      if (result.success && result.project) {
+        const newRef: ReferenceProjectSummary = {
+          id: result.project.id,
+          name: result.project.name,
+          description: result.project.description,
+          patternCount: result.project.patternCount,
+          tableCount: result.project.tableCount,
+          techStack: result.project.techStack,
+          status: result.project.status,
+          usageCount: result.project.usageCount
+        };
+        
+        setReferences(prev => [newRef, ...prev]);
+        setShowAddDialog(false);
+        setNewRefName('');
+        setNewRefDescription('');
+        setNewRefPath('');
+      } else {
+        console.error('Failed to load reference:', result.errors);
+      }
+    } catch (error) {
+      console.error('Failed to add reference:', error);
+    }
     setIsAdding(false);
-  }, [newRefName, newRefDescription, newRefPath]);
+  }, [projectId, newRefName, newRefDescription, newRefPath]);
 
   const handleSelectReference = useCallback(async (ref: ReferenceProjectSummary) => {
     if (ref.status !== 'ready') return;
     
     setSelectedId(ref.id);
     
-    // TODO: Replace with actual API call to get full reference
-    const fullRef: ReferenceProject = {
-      ...ref,
-      path: '/path/to/reference',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-      fileCount: 25,
-      patterns: [],
-      sqlTables: [],
-      files: [],
-      lastUsed: new Date().toISOString()
-    };
-    
-    onSelect(fullRef);
-  }, [onSelect]);
+    try {
+      const fullRef = await window.electronAPI.referenceGenerator.getReference(projectId, ref.id);
+      
+      if (fullRef) {
+        onSelect(fullRef);
+      } else {
+        // Fallback if full reference can't be loaded
+        const fallbackRef: ReferenceProject = {
+          ...ref,
+          path: '',
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+          fileCount: 0,
+          patterns: [],
+          sqlTables: [],
+          files: [],
+          lastUsed: new Date().toISOString()
+        };
+        onSelect(fallbackRef);
+      }
+    } catch (error) {
+      console.error('Failed to get reference details:', error);
+    }
+  }, [projectId, onSelect]);
 
   const getTechStackBadges = (techStack: ReferenceProjectSummary['techStack']) => {
     const badges: { label: string; variant: 'default' | 'secondary' | 'outline' }[] = [];

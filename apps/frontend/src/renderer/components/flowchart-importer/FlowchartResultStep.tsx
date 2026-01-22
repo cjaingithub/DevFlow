@@ -30,6 +30,7 @@ import { cn } from '../../lib/utils';
 import type { GenerationResult, GeneratedFile } from '../../../shared/types';
 
 interface FlowchartResultStepProps {
+  projectId: string;
   result: GenerationResult;
   onComplete: () => void;
   onBack: () => void;
@@ -178,12 +179,39 @@ function FileTree({ files }: { files: GeneratedFile[] }) {
 }
 
 export function FlowchartResultStep({
+  projectId,
   result,
   onComplete,
   onBack
 }: FlowchartResultStepProps) {
   const { t } = useTranslation(['flowchart', 'common']);
   const [activeTab, setActiveTab] = useState('files');
+  
+  const handleDownloadZip = useCallback(async () => {
+    try {
+      const files = result.generatedFiles.map(f => ({ path: f.path, content: f.content }));
+      const outputDir = result.generatedFiles[0]?.path.split('/')[0] || 'generated';
+      
+      await window.electronAPI.flowchart.saveGeneratedFiles(projectId, outputDir, files);
+    } catch (error) {
+      console.error('Failed to save files:', error);
+    }
+  }, [projectId, result.generatedFiles]);
+
+  const handleApplyToProject = useCallback(async () => {
+    try {
+      const files = result.generatedFiles.map(f => ({ path: f.path, content: f.content }));
+      const outputDir = result.generatedFiles[0]?.path.split('/')[0] || 'generated';
+      
+      const saveResult = await window.electronAPI.flowchart.saveGeneratedFiles(projectId, outputDir, files);
+      
+      if (saveResult.success) {
+        onComplete();
+      }
+    } catch (error) {
+      console.error('Failed to apply files:', error);
+    }
+  }, [projectId, result.generatedFiles, onComplete]);
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
@@ -335,12 +363,12 @@ export function FlowchartResultStep({
           Start Over
         </Button>
         <div className="flex items-center gap-3">
-          <Button variant="outline" className="gap-2">
+          <Button variant="outline" className="gap-2" onClick={handleDownloadZip}>
             <Download className="h-4 w-4" />
             Download ZIP
           </Button>
           <Button 
-            onClick={onComplete} 
+            onClick={handleApplyToProject} 
             className="gap-2 bg-gradient-to-r from-emerald-500 to-green-500 hover:from-emerald-600 hover:to-green-600"
           >
             <FolderOpen className="h-4 w-4" />

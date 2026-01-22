@@ -55,69 +55,48 @@ export function FlowchartGenerateStep({
   }, []);
 
   useEffect(() => {
+    // Subscribe to progress events
+    const unsubscribeProgress = window.electronAPI.flowchart.onFlowchartGenerationProgress(
+      (projId, prog, file) => {
+        if (projId === projectId) {
+          setProgress(prog);
+          setCurrentFile(file);
+          addLog(`Processing ${file}...`, 'info');
+        }
+      }
+    );
+
     const generate = async () => {
       try {
         addLog('Starting code generation...');
         setProgress(10);
 
-        // Simulate generation progress for demo
-        // In real implementation, this would call the IPC API
+        // Call the IPC API to generate code from flowchart
+        if (!parseResult || !parseResult.flowchart) {
+          throw new Error('No flowchart data available');
+        }
+
         addLog('Analyzing flowchart patterns...', 'info');
         setProgress(20);
-        await new Promise(r => setTimeout(r, 500));
 
-        addLog('Generating service classes...', 'info');
-        setCurrentFile('services/');
-        setProgress(40);
-        await new Promise(r => setTimeout(r, 500));
+        // Generate from the flowchart
+        const result = await window.electronAPI.flowchart.generateFromFlowchart(
+          projectId,
+          '', // empty xmlPath since we're generating from parsed result
+          config
+        );
 
-        addLog('Generating repository patterns...', 'info');
-        setCurrentFile('repositories/');
-        setProgress(60);
-        await new Promise(r => setTimeout(r, 500));
+        if (result.success && result.data) {
+          setProgress(100);
+          addLog(`Successfully generated ${result.data.generatedFiles.length} files!`, 'success');
+          setIsGenerating(false);
 
-        if (config.includeTests) {
-          addLog('Generating test files...', 'info');
-          setCurrentFile('tests/');
-          setProgress(80);
+          // Wait a moment before transitioning
           await new Promise(r => setTimeout(r, 500));
+          onComplete(result.data);
+        } else {
+          throw new Error(result.error || 'Generation failed');
         }
-
-        if (config.includeDocumentation) {
-          addLog('Generating documentation...', 'info');
-          setCurrentFile('docs/');
-          setProgress(90);
-          await new Promise(r => setTimeout(r, 300));
-        }
-
-        // Simulate the result
-        const result: GenerationResult = {
-          success: true,
-          generatedFiles: parseResult?.generatedPatterns.map(pattern => ({
-            path: `${config.outputDir}/${pattern.patternType}s/${pattern.name.toLowerCase()}.${config.targetLanguage === 'python' ? 'py' : config.targetLanguage === 'typescript' ? 'ts' : 'java'}`,
-            content: pattern.codeSnippet,
-            fileType: pattern.patternType,
-            sourcePattern: pattern.name,
-            confidence: pattern.confidence
-          })) || [],
-          errors: [],
-          warnings: [],
-          stats: {
-            totalFiles: parseResult?.generatedPatterns.length || 0,
-            byType: parseResult?.generatedPatterns.reduce((acc, p) => {
-              acc[p.patternType] = (acc[p.patternType] || 0) + 1;
-              return acc;
-            }, {} as Record<string, number>) || {}
-          }
-        };
-
-        setProgress(100);
-        addLog(`Successfully generated ${result.generatedFiles.length} files!`, 'success');
-        setIsGenerating(false);
-
-        // Wait a moment before transitioning
-        await new Promise(r => setTimeout(r, 500));
-        onComplete(result);
 
       } catch (err) {
         const errorMessage = err instanceof Error ? err.message : 'Generation failed';
@@ -128,6 +107,10 @@ export function FlowchartGenerateStep({
     };
 
     generate();
+
+    return () => {
+      unsubscribeProgress();
+    };
   }, [projectId, config, parseResult, addLog, onComplete]);
 
   return (

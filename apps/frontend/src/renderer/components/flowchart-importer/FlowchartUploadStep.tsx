@@ -59,7 +59,7 @@ export function FlowchartUploadStep({
       const content = await file.text();
       
       // Call the IPC to parse the XML content
-      const result = await window.electronAPI.parseFlowchartContent(
+      const result = await window.electronAPI.flowchart.parseFlowchartContent(
         projectId,
         content,
         file.name.replace(/\.xml$/i, '')
@@ -105,10 +105,10 @@ export function FlowchartUploadStep({
 
   const handleSelectFromProject = useCallback(async () => {
     try {
-      const result = await window.electronAPI.selectFlowchartFile();
+      const result = await window.electronAPI.flowchart.selectFlowchartFile();
       if (result.success && result.data) {
         // Read the file content
-        const fileResult = await window.electronAPI.parseFlowchartXml(projectId, result.data);
+        const fileResult = await window.electronAPI.flowchart.parseFlowchartXml(projectId, result.data);
         if (fileResult.success && fileResult.data) {
           // Create a fake File object for consistency
           const fakeFile = new File([''], result.data.split('/').pop() || 'flowchart.xml');

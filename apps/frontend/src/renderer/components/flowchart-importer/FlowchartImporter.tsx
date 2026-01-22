@@ -297,6 +297,7 @@ export function FlowchartImporter({ projectId, onComplete, onCancel }: Flowchart
 
         {state.step === 'result' && state.generationResult && (
           <FlowchartResultStep
+            projectId={projectId}
             result={state.generationResult}
             onComplete={handleComplete}
             onBack={handleBack}

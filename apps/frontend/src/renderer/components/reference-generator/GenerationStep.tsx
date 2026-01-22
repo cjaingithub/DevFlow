@@ -81,84 +81,78 @@ export function GenerationStep({
   const [isGenerating, setIsGenerating] = useState(true);
   const [logs, setLogs] = useState<string[]>([]);
 
-  // Simulate generation process
+  // Start generation on mount
   useEffect(() => {
     if (!isGenerating) return;
 
-    const simulateGeneration = async () => {
-      for (let i = 0; i < GENERATION_PHASES.length; i++) {
-        // Set current phase as active
-        setPhases(prev => prev.map((p, idx) => ({
-          ...p,
-          status: idx < i ? 'complete' : idx === i ? 'active' : 'pending'
-        })));
-        setCurrentPhaseIndex(i);
-        
-        // Update progress
-        onProgress({
-          current: i + 1,
-          total: GENERATION_PHASES.length,
-          phase: GENERATION_PHASES[i].name
-        });
-
-        // Add log
-        setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] Starting: ${GENERATION_PHASES[i].name}`]);
-
-        // Simulate phase duration
-        await new Promise(resolve => setTimeout(resolve, 800 + Math.random() * 600));
-
-        // Add completion log
-        setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] Completed: ${GENERATION_PHASES[i].name}`]);
-
-        // Mark phase as complete
-        setPhases(prev => prev.map((p, idx) => ({
-          ...p,
-          status: idx <= i ? 'complete' : 'pending'
-        })));
-      }
-
-      // Generation complete - create mock result
-      setIsGenerating(false);
+    // Subscribe to progress events
+    const unsubscribeProgress = window.electronAPI.referenceGenerator.onGenerationProgress((progressData) => {
+      const phaseIndex = Math.min(Math.floor(progressData.current / (progressData.total / GENERATION_PHASES.length)), GENERATION_PHASES.length - 1);
       
-      const mockResult: GenerationResult = {
-        success: true,
-        generatedFiles: [
-          { path: `${config.outputDir}/schema/schema.sql`, content: '-- Generated schema', fileType: 'sql', category: 'schema', confidence: 0.95 },
-          { path: `${config.outputDir}/services/service.py`, content: '# Generated service', fileType: 'py', category: 'service', confidence: 0.92 },
-          { path: `${config.outputDir}/repositories/repository.py`, content: '# Generated repository', fileType: 'py', category: 'repository', confidence: 0.90 },
-          { path: `${config.outputDir}/models/model.py`, content: '# Generated model', fileType: 'py', category: 'model', confidence: 0.94 },
-          ...(config.includeTests ? [
-            { path: `${config.outputDir}/tests/test_service.py`, content: '# Generated tests', fileType: 'py', category: 'test' as const, confidence: 0.88 }
-          ] : [])
-        ],
-        errors: [],
-        warnings: [],
-        transformations: config.entityMappings.map(m => ({
-          original: m.reference,
-          transformed: m.new,
-          type: m.mappingType
-        })),
-        stats: {
-          totalFiles: 5,
-          byCategory: {
-            schema: 1,
-            service: 1,
-            repository: 1,
-            model: 1,
-            test: config.includeTests ? 1 : 0
-          },
-          byType: {
-            sql: 1,
-            py: config.includeTests ? 4 : 3
-          }
-        }
-      };
+      setPhases(prev => prev.map((p, idx) => ({
+        ...p,
+        status: idx < phaseIndex ? 'complete' : idx === phaseIndex ? 'active' : 'pending'
+      })));
+      setCurrentPhaseIndex(phaseIndex);
+      
+      onProgress({
+        current: progressData.current,
+        total: progressData.total,
+        phase: progressData.phase
+      });
 
-      onComplete(mockResult);
+      setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${progressData.phase}${progressData.currentFile ? ` - ${progressData.currentFile}` : ''}`]);
+    });
+
+    const unsubscribeComplete = window.electronAPI.referenceGenerator.onGenerationComplete((result) => {
+      setIsGenerating(false);
+      setPhases(prev => prev.map(p => ({ ...p, status: 'complete' })));
+      onComplete(result);
+    });
+
+    const unsubscribeError = window.electronAPI.referenceGenerator.onGenerationError((error) => {
+      setIsGenerating(false);
+      setPhases(prev => prev.map((p, idx) => idx === currentPhaseIndex ? { ...p, status: 'error' } : p));
+      setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ERROR: ${error.message}`]);
+      onError(error.message);
+    });
+
+    // Start the generation
+    const startGeneration = async () => {
+      try {
+        setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] Starting code generation from reference: ${reference.name}`]);
+        
+        const result = await window.electronAPI.referenceGenerator.generateFromReference(
+          projectId,
+          reference.id,
+          requirementsContent,
+          config
+        );
+        
+        if (result.success) {
+          setIsGenerating(false);
+          setPhases(prev => prev.map(p => ({ ...p, status: 'complete' })));
+          onComplete(result);
+        } else {
+          setIsGenerating(false);
+          onError(result.errors?.join(', ') || 'Generation failed');
+        }
+      } catch (error) {
+        setIsGenerating(false);
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ERROR: ${errorMessage}`]);
+        onError(errorMessage);
+      }
     };
 
-    simulateGeneration();
-  }, [isGenerating, config, onProgress, onComplete]);
+    startGeneration();
+
+    return () => {
+      unsubscribeProgress();
+      unsubscribeComplete();
+      unsubscribeError();
+    };
+  }, [isGenerating, projectId, reference, requirementsContent, config, onProgress, onComplete, onError, currentPhaseIndex]);
 
   const progressPercent = ((currentPhaseIndex + 1) / GENERATION_PHASES.length) * 100;
 

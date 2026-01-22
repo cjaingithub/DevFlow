@@ -34,6 +34,8 @@ import { registerMcpHandlers } from './mcp-handlers';
 import { registerProfileHandlers } from './profile-handlers';
 import { registerTerminalWorktreeIpcHandlers } from './terminal';
 import { notificationService } from '../notification-service';
+import { registerReferenceGeneratorHandlers } from './reference-generator-handlers';
+import { registerFlowchartHandlers } from './flowchart-handlers';
 
 /**
  * Setup all IPC handlers across all domains
@@ -118,6 +120,12 @@ export function setupIpcHandlers(
   // API Profile handlers (custom Anthropic-compatible endpoints)
   registerProfileHandlers();
 
+  // Reference Generator handlers (pattern-based code generation)
+  registerReferenceGeneratorHandlers(pythonEnvManager, getMainWindow);
+
+  // Flowchart handlers (Lucid XML import and code generation)
+  registerFlowchartHandlers(pythonEnvManager, getMainWindow);
+
   console.warn('[IPC] All handler modules registered successfully');
 }
 
@@ -144,5 +152,7 @@ export {
   registerDebugHandlers,
   registerClaudeCodeHandlers,
   registerMcpHandlers,
-  registerProfileHandlers
+  registerProfileHandlers,
+  registerReferenceGeneratorHandlers,
+  registerFlowchartHandlers
 };

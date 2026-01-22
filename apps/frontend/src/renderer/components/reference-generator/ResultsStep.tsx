@@ -187,15 +187,43 @@ export function ResultsStep({
     }
   }, [selectedFile]);
 
-  const handleDownloadZip = useCallback(() => {
-    // TODO: Implement actual download via IPC
-    console.log('Download ZIP');
-  }, []);
+  const handleDownloadZip = useCallback(async () => {
+    try {
+      const files = result.generatedFiles.map(f => ({ path: f.path, content: f.content }));
+      const outputDir = result.generatedFiles[0]?.path.split('/')[0] || 'generated';
+      
+      const saveResult = await window.electronAPI.referenceGenerator.saveGeneratedFiles(
+        projectId,
+        files,
+        outputDir
+      );
+      
+      if (!saveResult.success) {
+        console.error('Failed to save files:', saveResult.error);
+      }
+    } catch (error) {
+      console.error('Failed to download files:', error);
+    }
+  }, [projectId, result.generatedFiles]);
 
-  const handleApplyToProject = useCallback(() => {
-    // TODO: Implement actual apply via IPC
-    onApply();
-  }, [onApply]);
+  const handleApplyToProject = useCallback(async () => {
+    try {
+      const files = result.generatedFiles.map(f => ({ path: f.path, content: f.content }));
+      
+      const applyResult = await window.electronAPI.referenceGenerator.applyToProject(
+        projectId,
+        files
+      );
+      
+      if (applyResult.success) {
+        onApply();
+      } else {
+        console.error('Failed to apply files:', applyResult.error);
+      }
+    } catch (error) {
+      console.error('Failed to apply to project:', error);
+    }
+  }, [projectId, result.generatedFiles, onApply]);
 
   return (
     <div className="space-y-6">
