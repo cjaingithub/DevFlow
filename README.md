@@ -5,50 +5,19 @@
 ![DevFlow Kanban Board](.github/assets/devflow-Kanban.png)
 
 [![License](https://img.shields.io/badge/license-AGPL--3.0-green?style=flat-square)](./agpl-3.0.txt)
-[![Discord](https://img.shields.io/badge/Discord-Join%20Community-5865F2?style=flat-square&logo=discord&logoColor=white)](https://discord.gg/KCXaPBr4Dj)
-[![YouTube](https://img.shields.io/badge/YouTube-Subscribe-FF0000?style=flat-square&logo=youtube&logoColor=white)](https://www.youtube.com/@AndreMikalsen)
-[![CI](https://img.shields.io/github/actions/workflow/status/AndyMik90/devflow/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/AndyMik90/devflow/actions)
 
 ---
 
-## Download
+## Getting Started
 
-### Stable Release
+Clone and build from source:
 
-<!-- STABLE_VERSION_BADGE -->
-[![Stable](https://img.shields.io/badge/stable-2.7.2-blue?style=flat-square)](https://github.com/AndyMik90/devflow/releases/tag/v2.7.2)
-<!-- STABLE_VERSION_BADGE_END -->
-
-<!-- STABLE_DOWNLOADS -->
-| Platform | Download |
-|----------|----------|
-| **Windows** | [devflow-2.7.2-win32-x64.exe](https://github.com/AndyMik90/devflow/releases/download/v2.7.2/devflow-2.7.2-win32-x64.exe) |
-| **macOS (Apple Silicon)** | [devflow-2.7.2-darwin-arm64.dmg](https://github.com/AndyMik90/devflow/releases/download/v2.7.2/devflow-2.7.2-darwin-arm64.dmg) |
-| **macOS (Intel)** | [devflow-2.7.2-darwin-x64.dmg](https://github.com/AndyMik90/devflow/releases/download/v2.7.2/devflow-2.7.2-darwin-x64.dmg) |
-| **Linux** | [devflow-2.7.2-linux-x86_64.AppImage](https://github.com/AndyMik90/devflow/releases/download/v2.7.2/devflow-2.7.2-linux-x86_64.AppImage) |
-| **Linux (Debian)** | [devflow-2.7.2-linux-amd64.deb](https://github.com/AndyMik90/devflow/releases/download/v2.7.2/devflow-2.7.2-linux-amd64.deb) |
-<!-- STABLE_DOWNLOADS_END -->
-
-### Beta Release
-
-> ⚠️ Beta releases may contain bugs and breaking changes. [View all releases](https://github.com/AndyMik90/devflow/releases)
-
-<!-- BETA_VERSION_BADGE -->
-[![Beta](https://img.shields.io/badge/beta-2.7.2--beta.10-orange?style=flat-square)](https://github.com/AndyMik90/devflow/releases/tag/v2.7.2-beta.10)
-<!-- BETA_VERSION_BADGE_END -->
-
-<!-- BETA_DOWNLOADS -->
-| Platform | Download |
-|----------|----------|
-| **Windows** | [devflow-2.7.2-beta.10-win32-x64.exe](https://github.com/AndyMik90/devflow/releases/download/v2.7.2-beta.10/devflow-2.7.2-beta.10-win32-x64.exe) |
-| **macOS (Apple Silicon)** | [devflow-2.7.2-beta.10-darwin-arm64.dmg](https://github.com/AndyMik90/devflow/releases/download/v2.7.2-beta.10/devflow-2.7.2-beta.10-darwin-arm64.dmg) |
-| **macOS (Intel)** | [devflow-2.7.2-beta.10-darwin-x64.dmg](https://github.com/AndyMik90/devflow/releases/download/v2.7.2-beta.10/devflow-2.7.2-beta.10-darwin-x64.dmg) |
-| **Linux** | [devflow-2.7.2-beta.10-linux-x86_64.AppImage](https://github.com/AndyMik90/devflow/releases/download/v2.7.2-beta.10/devflow-2.7.2-beta.10-linux-x86_64.AppImage) |
-| **Linux (Debian)** | [devflow-2.7.2-beta.10-linux-amd64.deb](https://github.com/AndyMik90/devflow/releases/download/v2.7.2-beta.10/devflow-2.7.2-beta.10-linux-amd64.deb) |
-| **Linux (Flatpak)** | [devflow-2.7.2-beta.10-linux-x86_64.flatpak](https://github.com/AndyMik90/devflow/releases/download/v2.7.2-beta.10/devflow-2.7.2-beta.10-linux-x86_64.flatpak) |
-<!-- BETA_DOWNLOADS_END -->
-
-> All releases include SHA256 checksums and VirusTotal scan results for security verification.
+```bash
+git clone https://github.com/cjaingithub/DevFlow.git
+cd DevFlow
+npm run install:all
+npm run dev
+```
 
 ---
 
@@ -198,9 +167,7 @@ We welcome contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for:
 
 ## Community
 
-- **Discord** - [Join our community](https://discord.gg/KCXaPBr4Dj)
-- **Issues** - [Report bugs or request features](https://github.com/AndyMik90/devflow/issues)
-- **Discussions** - [Ask questions](https://github.com/AndyMik90/devflow/discussions)
+- **Issues** - [Report bugs or request features](https://github.com/cjaingithub/DevFlow/issues)
 
 ---
 
@@ -208,14 +175,4 @@ We welcome contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for:
 
 **AGPL-3.0** - GNU Affero General Public License v3.0
 
-DevFlow is free to use. If you modify and distribute it, or run it as a service, your code must also be open source under AGPL-3.0.
-
-Commercial licensing available for closed-source use cases.
-
----
-
-## Star History
-
-[![GitHub Repo stars](https://img.shields.io/github/stars/AndyMik90/devflow?style=social)](https://github.com/AndyMik90/devflow/stargazers)
-
-[![Star History Chart](https://api.star-history.com/svg?repos=AndyMik90/devflow&type=Date)](https://star-history.com/#AndyMik90/devflow&Date)
+Based on [DevFlow](https://github.com/AndyMik90/devflow) by AndyMik90.
