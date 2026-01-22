@@ -160,6 +160,11 @@ playwright/.cache/
 *.tmp
 *.temp
 
+# ===========================
+# Personal/Private Notes
+# ===========================
+RESUME_INTERVIEW_NOTES.md
+
 # Development
 dev/
 _bmad/
