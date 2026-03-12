@@ -175,4 +175,3 @@ We welcome contributions! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for:
 
 **AGPL-3.0** - GNU Affero General Public License v3.0
 
-Based on [DevFlow](https://github.com/AndyMik90/devflow) by AndyMik90.
